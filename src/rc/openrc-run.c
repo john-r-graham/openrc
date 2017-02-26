@@ -1100,9 +1100,9 @@ service_plugable(void)
 }
 
 static bool
-is_command(char *arg)
+is_opt_delim(char *arg)
 {
-	if (arg && arg[strlen(arg)-1] == ':')
+	if (arg && strcmp(arg, "--") == 0)
 		return true;
 	return false;
 }
@@ -1138,6 +1138,7 @@ int main(int argc, char **argv)
  	const char *file;
 	struct stat stbuf;
 	char *rc_args;
+	bool has_args;
 
 	/* Show help if insufficient args */
 	if (argc < 2 || !exists(argv[1])) {
@@ -1320,18 +1321,25 @@ int main(int argc, char **argv)
 	if (runscript)
 		ewarn("%s uses runscript, please convert to openrc-run.", service);
 
+	/* Detect "--" alternate syntax indicator that may have already been eaten by the parser. */
+	has_args = is_opt_delim(argv[optind-1]);
+
 	/* Now run each command */
 	retval = EXIT_SUCCESS;
 	while (optind < argc) {
-		optarg = xstrdup(argv[optind++]);
+		optarg = argv[optind++];
+		/* Detect "--" alternate syntax indicator later in the command line. */
+		if (is_opt_delim(optarg)) {
+			has_args = true;
+			continue;
+		}
 
-		/* Detect command with arguments. */
 		unsetenv("RC_ARGS");
-		if (is_command(optarg)) {
-			optarg[strlen(optarg)-1] = '\0'; /* Remove trailing colon. */
+		if (has_args) {
 			/* Collect arguments and adjust optind accordingly. */
+			printf("Collecting args... ");
 			rc_args = NULL;
-			while (optind < argc && ! is_command(argv[optind]))
+			while (optind < argc && ! is_opt_delim(argv[optind]))
 				arg_append(&rc_args, argv[optind++]);
 			if (rc_args) {
 				setenv("RC_ARGS", rc_args, 1);
@@ -1453,7 +1461,6 @@ int main(int argc, char **argv)
 			rc_stringlist_free(restart_services);
 			restart_services = NULL;
 		}
-		free(optarg);
 
 		if (!doneone)
 			usage(EXIT_FAILURE);
