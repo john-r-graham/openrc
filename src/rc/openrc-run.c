@@ -63,7 +63,7 @@
 
 const char *applet = NULL;
 const char *extraopts = "stop | start | restart | describe | zap";
-const char *getoptstring = "dDsSvl:Z" getoptstring_COMMON;
+const char *getoptstring = "+dDsSvl:Z" getoptstring_COMMON;
 const struct option longopts[] = {
 	{ "debug",      0, NULL, 'd'},
 	{ "dry-run",    0, NULL, 'Z'},
@@ -1099,6 +1099,32 @@ service_plugable(void)
 	return allow;
 }
 
+static bool
+is_command(char *arg)
+{
+	if (arg && arg[strlen(arg)-1] == ':')
+		return true;
+	return false;
+}
+
+static void
+arg_append(char **args, char *new_arg)
+{
+	size_t new_len;
+
+	if (new_arg) {
+		if (! *args) {
+			*args = xstrdup(new_arg);
+		} else {
+			new_len = strlen(*args) + strlen(new_arg) + 2;
+			*args = xrealloc(*args, new_len);
+			strcat(*args, " ");
+			strcat(*args, new_arg);
+		}
+	}
+}
+
+
 int main(int argc, char **argv)
 {
 	bool doneone = false;
@@ -1111,6 +1137,7 @@ int main(int argc, char **argv)
 	size_t l = 0, ll;
  	const char *file;
 	struct stat stbuf;
+	char *rc_args;
 
 	/* Show help if insufficient args */
 	if (argc < 2 || !exists(argv[1])) {
@@ -1130,10 +1157,12 @@ int main(int argc, char **argv)
 
 	atexit(cleanup);
 
+	printf("JRG: John was here! :)\n");
+
 	/* We need to work out the real full path to our service.
 	 * This works fine, provided that we ONLY allow multiplexed services
 	 * to exist in the same directory as the master link.
-	 * Also, the master link as to be a real file in the init dir. */
+	 * Also, the master link has to be a real file in the init dir. */
 	if (!realpath(argv[1], path)) {
 		fprintf(stderr, "realpath: %s\n", strerror(errno));
 		exit(EXIT_FAILURE);
@@ -1291,10 +1320,24 @@ int main(int argc, char **argv)
 	if (runscript)
 		ewarn("%s uses runscript, please convert to openrc-run.", service);
 
-	/* Now run each option */
+	/* Now run each command */
 	retval = EXIT_SUCCESS;
 	while (optind < argc) {
-		optarg = argv[optind++];
+		optarg = xstrdup(argv[optind++]);
+
+		/* Detect command with arguments. */
+		unsetenv("RC_ARGS");
+		if (is_command(optarg)) {
+			optarg[strlen(optarg)-1] = '\0'; /* Remove trailing colon. */
+			/* Collect arguments and adjust optind accordingly. */
+			rc_args = NULL;
+			while (optind < argc && ! is_command(argv[optind]))
+				arg_append(&rc_args, argv[optind++]);
+			if (rc_args) {
+				setenv("RC_ARGS", rc_args, 1);
+				free(rc_args);
+			}
+		}
 
 		/* Abort on a sighup here */
 		if (sighup)
@@ -1410,6 +1453,7 @@ int main(int argc, char **argv)
 			rc_stringlist_free(restart_services);
 			restart_services = NULL;
 		}
+		free(optarg);
 
 		if (!doneone)
 			usage(EXIT_FAILURE);

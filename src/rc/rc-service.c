@@ -29,7 +29,7 @@
 
 const char *applet = NULL;
 const char *extraopts = NULL;
-const char *getoptstring = "e:ilr:IN" getoptstring_COMMON;
+const char *getoptstring = "+e:ilr:IN" getoptstring_COMMON;
 const struct option longopts[] = {
 	{ "exists",   1, NULL, 'e' },
 	{ "ifexists", 0, NULL, 'i' },
