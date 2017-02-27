@@ -63,7 +63,7 @@
 
 const char *applet = NULL;
 const char *extraopts = "stop | start | restart | describe | zap";
-const char *getoptstring = "+dDsSvl:Z" getoptstring_COMMON;
+const char *getoptstring = "+dDsSvl:Za" getoptstring_COMMON;
 const struct option longopts[] = {
 	{ "debug",      0, NULL, 'd'},
 	{ "dry-run",    0, NULL, 'Z'},
@@ -71,6 +71,7 @@ const struct option longopts[] = {
 	{ "ifstopped",  0, NULL, 'S'},
 	{ "nodeps",     0, NULL, 'D'},
 	{ "lockfd",     1, NULL, 'l'},
+	{ "args",       0, NULL, 'a'},
 	longopts_COMMON
 };
 const char *const longopts_help[] = {
@@ -80,6 +81,7 @@ const char *const longopts_help[] = {
 	"only run commands when stopped",
 	"ignore dependencies",
 	"fd of the exclusive lock from rc",
+	"service command is followed by args",
 	longopts_help_COMMON
 };
 const char *usagestring = NULL;
@@ -1099,14 +1101,6 @@ service_plugable(void)
 	return allow;
 }
 
-static bool
-is_opt_delim(char *arg)
-{
-	if (arg && strcmp(arg, "--") == 0)
-		return true;
-	return false;
-}
-
 static void
 arg_append(char **args, char *new_arg)
 {
@@ -1282,6 +1276,9 @@ int main(int argc, char **argv)
 		case 'Z':
 			dry_run = true;
 			break;
+		case 'a':
+			has_args = true;
+			break;
 		case_RC_COMMON_GETOPT
 		}
 
@@ -1321,18 +1318,10 @@ int main(int argc, char **argv)
 	if (runscript)
 		ewarn("%s uses runscript, please convert to openrc-run.", service);
 
-	/* Detect "--" alternate syntax indicator that may have already been eaten by the parser. */
-	has_args = is_opt_delim(argv[optind-1]);
-
 	/* Now run each command */
 	retval = EXIT_SUCCESS;
 	while (optind < argc) {
 		optarg = argv[optind++];
-		/* Detect "--" alternate syntax indicator later in the command line. */
-		if (is_opt_delim(optarg)) {
-			has_args = true;
-			continue;
-		}
 
 		unsetenv("RC_ARGS");
 		if (has_args) {

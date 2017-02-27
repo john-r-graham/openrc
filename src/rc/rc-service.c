@@ -29,7 +29,7 @@
 
 const char *applet = NULL;
 const char *extraopts = NULL;
-const char *getoptstring = "+e:ilr:IN" getoptstring_COMMON;
+const char *getoptstring = "+e:ilr:INa" getoptstring_COMMON;
 const struct option longopts[] = {
 	{ "exists",   1, NULL, 'e' },
 	{ "ifexists", 0, NULL, 'i' },
@@ -37,6 +37,7 @@ const struct option longopts[] = {
 	{ "ifnotstarted", 0, NULL, 'N' },
 	{ "list",     0, NULL, 'l' },
 	{ "resolve",  1, NULL, 'r' },
+	{ "args",     0, NULL, 'a' },
 	longopts_COMMON
 };
 const char * const longopts_help[] = {
@@ -46,10 +47,11 @@ const char * const longopts_help[] = {
 	"if the service is not started then run the command",
 	"list all available services",
 	"resolve the service name to an init script",
+	"service command is followed by args",
 	longopts_help_COMMON
 };
 const char *usagestring = ""							\
-	"Usage: rc-service [options] [-i] <service> <cmd>...\n"		\
+	"Usage: rc-service [options] [-i] [-a] <service> <cmd>...\n"		\
 	"   or: rc-service [options] -e <service>\n"			\
 	"   or: rc-service [options] -l\n"				\
 	"   or: rc-service [options] -r <service>";
@@ -64,6 +66,7 @@ int main(int argc, char **argv)
 	bool if_exists = false;
 	bool if_inactive = false;
 	bool if_notstarted = false;
+	bool has_args = false;
 
 	applet = basename_c(argv[0]);
 	/* Ensure that we are only quiet when explicitly told to be */
@@ -106,6 +109,9 @@ int main(int argc, char **argv)
 			free(service);
 			return EXIT_SUCCESS;
 			/* NOTREACHED */
+		case 'a':
+			has_args = true;
+			break;
 
 		case_RC_COMMON_GETOPT
 		}
