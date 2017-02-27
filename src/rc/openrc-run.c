@@ -1337,7 +1337,6 @@ int main(int argc, char **argv)
 		unsetenv("RC_ARGS");
 		if (has_args) {
 			/* Collect arguments and adjust optind accordingly. */
-			printf("Collecting args... ");
 			rc_args = NULL;
 			while (optind < argc && ! is_opt_delim(argv[optind]))
 				arg_append(&rc_args, argv[optind++]);
