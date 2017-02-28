@@ -1,7 +1,7 @@
 #!/bin/sh
 
 EBUILD_PATH="/usr/local/portage/local/sys-apps/openrc"
-PV="openrc-0.22.4"
+PV="openrc-0.23.2"
 
 PATCHNO="$1"
 if [ -z "${PATCHNO}" ] ; then

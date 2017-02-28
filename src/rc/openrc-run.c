@@ -1327,7 +1327,7 @@ int main(int argc, char **argv)
 		if (has_args) {
 			/* Collect arguments and adjust optind accordingly. */
 			rc_args = NULL;
-			while (optind < argc && ! is_opt_delim(argv[optind]))
+			while (optind < argc)
 				arg_append(&rc_args, argv[optind++]);
 			if (rc_args) {
 				setenv("RC_ARGS", rc_args, 1);

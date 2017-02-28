@@ -51,7 +51,8 @@ const char * const longopts_help[] = {
 	longopts_help_COMMON
 };
 const char *usagestring = ""							\
-	"Usage: rc-service [options] [-i] [-a] <service> <cmd>...\n"		\
+	"Usage: rc-service [options] [-i] <service> <cmd>...\n"		\
+	"   or: rc-service [options] [-i] -a <service> <cmd> <arg>...\n"		\
 	"   or: rc-service [options] -e <service>\n"			\
 	"   or: rc-service [options] -l\n"				\
 	"   or: rc-service [options] -r <service>";
@@ -131,6 +132,10 @@ int main(int argc, char **argv)
 		return 0;
 	if (if_notstarted && (state & RC_SERVICE_STARTED))
 		return 0;
+	if (has_args) {
+		*argv-- = "-a";
+		argc++;
+	}
 	*argv = service;
 	execv(*argv, argv);
 	eerrorx("%s: %s", applet, strerror(errno));
