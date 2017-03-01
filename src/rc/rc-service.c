@@ -49,8 +49,7 @@ const char * const longopts_help[] = {
 	longopts_help_COMMON
 };
 const char *usagestring = ""							\
-	"Usage: rc-service [options] [-i] <service> <cmd>...\n"		\
-	"   or: rc-service [options] [-i] <service> <cmd>: [<arg>...] [<cmd>: [<arg>...]]...\n"		\
+	"Usage: rc-service [options] [-i] <service> [<cmd>...] [<cmd>: [<arg>...]...]\n"		\
 	"   or: rc-service [options] -e <service>\n"			\
 	"   or: rc-service [options] -l\n"				\
 	"   or: rc-service [options] -r <service>";
