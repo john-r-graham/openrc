@@ -17,16 +17,28 @@
 .Sh SYNOPSIS
 .Nm
 .Op Fl i , -ifexists
-.Ar service cmd
-.Op Ar ...
+.Ar service
+.Op cmd...
+.Oo
+.Ar cmd: Op Ar arg... Ns
+.Ar ...
+.Oc
 .Nm
 .Op Fl I , -ifinactive
-.Ar service cmd
-.Op Ar ...
+.Ar service
+.Op cmd...
+.Oo
+.Ar cmd: Op Ar arg... Ns
+.Ar ...
+.Oc
 .Nm
 .Op Fl N , -ifnotstarted
-.Ar service cmd
-.Op Ar ...
+.Ar service
+.Op cmd...
+.Oo
+.Ar cmd: Op Ar arg... Ns
+.Ar ...
+.Oc
 .Nm
 .Fl e , -exists
 .Ar service
@@ -51,6 +63,13 @@ or
 is given then
 .Nm
 returns 0 if the service exists but is in the wrong state.
+.Pp
+When started (or stopped) from a runlevel, services can take only
+a single service command. However, when run from the command line,
+the service name can be followed by one or more service commands
+(although there's typically only one). In addition, some service
+commands (for some services) can take arguments, the presence of
+which is indicated by appending a ':' to the service command.
 .Pp
 If given the
 .Fl l , -list
