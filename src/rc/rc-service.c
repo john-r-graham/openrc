@@ -29,32 +29,32 @@
 
 const char *applet = NULL;
 const char *extraopts = NULL;
-const char *getoptstring = "+e:ilr:INa" getoptstring_COMMON;
+const char *getoptstring = "+iINae:r:l" getoptstring_COMMON;
 const struct option longopts[] = {
-	{ "exists",   1, NULL, 'e' },
-	{ "ifexists", 0, NULL, 'i' },
-	{ "ifinactive", 0, NULL, 'I' },
+	{ "ifexists",     0, NULL, 'i' },
+	{ "ifinactive",   0, NULL, 'I' },
 	{ "ifnotstarted", 0, NULL, 'N' },
-	{ "list",     0, NULL, 'l' },
-	{ "resolve",  1, NULL, 'r' },
-	{ "args",     0, NULL, 'a' },
+	{ "args",         0, NULL, 'a' },
+	{ "exists",       1, NULL, 'e' },
+	{ "resolve",      1, NULL, 'r' },
+	{ "list",         0, NULL, 'l' },
 	longopts_COMMON
 };
 const char * const longopts_help[] = {
-	"tests if the service exists or not",
 	"if the service exists then run the command",
 	"if the service is inactive then run the command",
 	"if the service is not started then run the command",
-	"list all available services",
-	"resolve the service name to an init script",
 	"service command is followed by args",
+	"tests if the service exists or not",
+	"resolve the service name to an init script",
+	"list all available services",
 	longopts_help_COMMON
 };
-const char *usagestring = ""							\
-	"Usage: rc-service [options] [-i] <service> [<cmd>...]\n"		\
-	"   or: rc-service [options] [-i] -a <service> [<cmd> [<arg>...]]\n"		\
-	"   or: rc-service [options] -e <service>\n"			\
-	"   or: rc-service [options] -r <service>\n"			\
+const char *usagestring = ""
+	"Usage: rc-service [options] [-i|-I|-N] <service> [<cmd>...]\n"
+	"   or: rc-service [options] [-i|-I|-N] -a <service> [<cmd> [<arg>...]]\n"
+	"   or: rc-service [options] -e <service>\n"
+	"   or: rc-service [options] -r <service>\n"
 	"   or: rc-service [options] -l\n";
 
 int main(int argc, char **argv)
