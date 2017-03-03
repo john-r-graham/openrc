@@ -12,22 +12,22 @@
 
 #include <getopt.h>
 
-#define getoptstring_COMMON "ChqVv"
+#define getoptstring_COMMON "CVvqh"
 
-#define longopts_COMMON							      \
-	{ "help",           0, NULL, 'h'},				      \
+#define longopts_COMMON							    	  \
 	{ "nocolor",        0, NULL, 'C'},				      \
 	{ "version",        0, NULL, 'V'},				      \
 	{ "verbose",        0, NULL, 'v'},				      \
 	{ "quiet",          0, NULL, 'q'},				      \
+	{ "help",           0, NULL, 'h'},				      \
 	{ NULL,             0, NULL,  0 }
 
 #define longopts_help_COMMON						      \
-	"Display this help output",					      \
-	"Disable color output",						      \
-	"Display software version",			              \
-	"Run verbosely",						      \
-	"Run quietly (repeat to suppress errors)"
+	"Disable color output",							      \
+	"Display software version",				              \
+	"Run verbosely",								      \
+	"Run quietly (repeat to suppress errors)",			  \
+	"Display this help output"
 
 #define case_RC_COMMON_getopt_case_C  setenv ("EINFO_COLOR", "NO", 1);
 #define case_RC_COMMON_getopt_case_h  usage (EXIT_SUCCESS);
@@ -37,11 +37,11 @@
 #define case_RC_COMMON_getopt_default usage (EXIT_FAILURE);
 
 #define case_RC_COMMON_GETOPT						      \
-	case 'C': case_RC_COMMON_getopt_case_C; break;			      \
-	case 'h': case_RC_COMMON_getopt_case_h; break;			      \
-	case 'V': case_RC_COMMON_getopt_case_V; break;			      \
-	case 'v': case_RC_COMMON_getopt_case_v; break;			      \
-	case 'q': case_RC_COMMON_getopt_case_q; break;			      \
+	case 'C': case_RC_COMMON_getopt_case_C; break;	      \
+	case 'h': case_RC_COMMON_getopt_case_h; break;	      \
+	case 'V': case_RC_COMMON_getopt_case_V; break;	      \
+	case 'v': case_RC_COMMON_getopt_case_v; break;	      \
+	case 'q': case_RC_COMMON_getopt_case_q; break;	      \
 	default:  case_RC_COMMON_getopt_default; break;
 
 extern const char *applet;
