@@ -46,10 +46,10 @@
 .Fl e , -exists
 .Ar service
 .Nm
-.Fl l , -list
-.Nm
 .Fl r , -resolve
 .Ar service
+.Nm
+.Fl l , -list
 .Sh DESCRIPTION
 Service scripts could be in different places on different systems.
 .Nm
@@ -75,19 +75,18 @@ commands (for some services) can take arguments, the presence of
 which is indicated by the -a command line option. In this mode
 only a single service command is supported.
 .Pp
-.Pp
-If given the
-.Fl l , -list
-argument then
-.Nm
-will list all available services.
-.Pp
 .Fl e , -exists
 return 0 if it can find
 .Ar service ,
 otherwise -1.
 .Fl r , -resolve
 does the same and also prints the full path of the service to stdout.
+.Pp
+If given the
+.Fl l , -list
+argument then
+.Nm
+will list all available services.
 .Sh SEE ALSO
 .Xr openrc 8 ,
 .Xr stdout 3
