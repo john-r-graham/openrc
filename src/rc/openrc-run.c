@@ -1157,8 +1157,6 @@ int main(int argc, char **argv)
 
 	atexit(cleanup);
 
-	printf("JRG: John was here! :)\n");
-
 	/* We need to work out the real full path to our service.
 	 * This works fine, provided that we ONLY allow multiplexed services
 	 * to exist in the same directory as the master link.
