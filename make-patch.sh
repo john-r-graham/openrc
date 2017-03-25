@@ -10,7 +10,7 @@ if [ -z "${SUFFIX}" ] ; then
 fi
 
 echo "Copying patch #${SUFFIX} to the local overlay."
-PATCHNAME="${PV}-cmd-args-patch-${SUFFIX}.patch"
+PATCHNAME="${PV}-cmd-args-${SUFFIX}.patch"
 
 set -x
 git diff master >/tmp/${PATCHNAME}
