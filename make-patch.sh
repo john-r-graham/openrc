@@ -1,15 +1,16 @@
 #!/bin/sh
 
-EBUILD_PATH="/usr/local/portage/local/sys-apps/openrc"
-PV="openrc-0.23.2"
+EBUILD_PATH="/usr/local/portage/jrg/sys-apps/openrc"
+PV="openrc-0.23.2_p1"
 
-PATCHNO="$1"
-if [ -z "${PATCHNO}" ] ; then
-	PATCHNO=1
+SUFFIX="$1"
+if [ -z "${SUFFIX}" ] ; then
+	echo "$0: Error: Must specify patch suffix."
+	exit 1
 fi
 
-echo "Copying patch #${PATCHNO} to the local overlay."
-PATCHNAME="${PV}-cmd-args-patch${PATCHNO}.patch"
+echo "Copying patch #${SUFFIX} to the local overlay."
+PATCHNAME="${PV}-cmd-args-${SUFFIX}.patch"
 
 set -x
 git diff master >/tmp/${PATCHNAME}

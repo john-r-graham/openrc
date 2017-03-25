@@ -41,13 +41,13 @@ const struct option longopts[] = {
 	longopts_COMMON
 };
 const char * const longopts_help[] = {
-	"if the service exists then run the command",
-	"if the service is inactive then run the command",
-	"if the service is not started then run the command",
-	"service command is followed by args",
-	"tests if the service exists or not",
-	"resolve the service name to an init script",
-	"list all available services",
+	"If the service exists then run the command",
+	"If the service is inactive then run the command",
+	"If the service is not started then run the command",
+	"Service command is followed by args",
+	"Tests if the service exists or not",
+	"Resolve the service name to an init script",
+	"List all available services",
 	longopts_help_COMMON
 };
 const char *usagestring = ""
